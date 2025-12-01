@@ -4,6 +4,8 @@ https://adventofcode.com/2025/about
 
 ## Day 1: Secret Entrance
 
+### Part 1
+
 The Elves have good news and bad news.
 
 The good news is that they've discovered project management! This has given them the tools they need to prevent their usual Christmas emergency. For example, they now know that the North Pole decorations need to be finished soon so that other critical tasks can start on time.
@@ -65,7 +67,8 @@ Your puzzle answer was 1102.
 
 The first half of this puzzle is complete! It provides one gold star: *
 
---- Part Two ---
+### Part Two
+
 You're sure that's the right password, but the door won't open. You knock, but nobody answers. You build a snowman while you think.
 
 As you're rolling the snowballs for your snowman, you find another security document that must have fallen into the snow:

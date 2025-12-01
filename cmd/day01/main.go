@@ -14,12 +14,19 @@ import (
 	Each line in the input represents a single move left or right.
 */
 
-func turnDial(dialPos int, command string) int {
-	moveLeft := false
+// mod is a floor style modulo operation since Go uses truncated modulo.
+//
+// I use this because I want -25 % 100 to be 75, where -25 % 100 == -25 in Go.
+func mod(a, b int) int {
+	return (a%b + b) % b
+}
+
+func parseInput(command string) (bool, int) {
+	left := false
 	num := 0
 	for _, ch := range command {
 		if ch == 'L' {
-			moveLeft = true
+			left = true
 		}
 
 		if ch >= '0' && ch <= '9' {
@@ -28,6 +35,12 @@ func turnDial(dialPos int, command string) int {
 			num += val
 		}
 	}
+
+	return left, num
+}
+
+func turnDial(dialPos int, command string) int {
+	moveLeft, num := parseInput(command)
 
 	// We are only counting times we land on zero, not go past it so going more than a full spin is not important.
 	num = num % 100
@@ -38,6 +51,33 @@ func turnDial(dialPos int, command string) int {
 	}
 
 	return (dialPos + num) % 100
+}
+
+func turnDialCountPasses(dialPos int, command string) (int /* position after spin */, int /* times passing zero */) {
+	moveLeft, num := parseInput(command)
+
+	// We will count the number of full rotations ahead of time.
+	fullRot := num / 100
+	num = num % 100
+
+	if moveLeft {
+		num *= -1
+	}
+
+	count := 0
+
+	// We moved right and passed or stopped at 0.
+	if dialPos+num >= 100 {
+		count++
+	}
+
+	// We moved left and passed or stopped at 0.
+	// This one needs to account for starting at 0. The right movement naturally accounts for that by checking for 100.
+	if dialPos > 0 && dialPos+num <= 0 {
+		count++
+	}
+
+	return mod(dialPos+num, 100), fullRot + count
 }
 
 func main() {
@@ -58,6 +98,9 @@ func main() {
 	dialPos := 50
 	count := 0
 
+	partTwoPos := 50
+	partTwoCount := 0
+
 	for scanner.Scan() {
 		line := scanner.Text()
 
@@ -66,7 +109,16 @@ func main() {
 		if dialPos == 0 {
 			count++
 		}
+
+		nextTwoPos, addTwoCount := turnDialCountPasses(partTwoPos, line)
+		partTwoPos = nextTwoPos
+		partTwoCount += addTwoCount
+
+		if dialPos != partTwoPos {
+			log.Fatal("Part Two did not match")
+		}
 	}
 
-	fmt.Printf("Times the dial hit zero: %d\n", count)
+	fmt.Printf("Part One: %d\n", count)
+	fmt.Printf("Part Two: %d\n", partTwoCount)
 }
