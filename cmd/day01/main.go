@@ -7,13 +7,6 @@ import (
 	"os"
 )
 
-/*
-	The goal of this puzzle is to count the number of times a safe dial ends at 0.
-
-	The numbers range from 0-99.
-	Each line in the input represents a single move left or right.
-*/
-
 // mod is a floor style modulo operation since Go uses truncated modulo.
 //
 // I use this because I want -25 % 100 to be 75, where -25 % 100 == -25 in Go.
