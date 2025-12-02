@@ -61,16 +61,12 @@ func partOne(allParts []Pair) int {
 func partTwo(allParts []Pair) int {
 	sum := 0
 
-	seen := make(map[int]bool)
-
 	for _, pair := range allParts {
 		for num := pair.start; num <= pair.end; num++ {
-			if seen[num] {
-				continue
-			}
-
 			val := strconv.Itoa(num)
 
+			// We'll break the number into equal length strings starting from the longest possible string with matches.
+			// If all parts match, then we add to the sum.
 			for h := len(val) / 2; h > 0; h-- {
 				if len(val)%h != 0 {
 					continue
@@ -92,9 +88,8 @@ func partTwo(allParts []Pair) int {
 				}
 
 				if shouldAdd {
-					seen[num] = true
 					sum += num
-					break
+					break // Don't count repeats
 				}
 			}
 		}
