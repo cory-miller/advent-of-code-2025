@@ -79,7 +79,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	path := fmt.Sprintf("%s/cmd/day01/data/input.txt", d)
+	path := fmt.Sprintf("%s/data/01.txt", d)
 
 	f, err := os.Open(path)
 	if err != nil {
