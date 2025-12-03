@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 )
 
 func partOne(battery string) int {
@@ -37,6 +38,43 @@ func partOne(battery string) int {
 	return maxDig*10 + minDig
 }
 
+func maxIndex(in []rune, start, end int) int {
+	m := 0
+	index := 0
+
+	for i := start; i <= end; i++ {
+		ch := in[i]
+		if int(ch-'0') > m {
+			m = int(ch - '0')
+			index = i
+		}
+		if m == 9 {
+			break
+		}
+	}
+	return index
+}
+
+func partTwo(battery string) int {
+	// Suppose you have a string of length 15 and need to form a 12-digit number.
+	// We can take the string, leaving the final 11 characters, and see what the biggest number the first part of the
+	// range has. Repeat this until we form a 12-digit number.
+	var chars []rune
+	mi := 0
+	for len(chars) < 12 {
+		m := maxIndex([]rune(battery), mi, len(battery)-12+len(chars))
+		chars = append(chars, rune(battery[m]))
+		mi = m + 1
+	}
+
+	final, err := strconv.Atoi(string(chars))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return final
+}
+
 func main() {
 	d, err := os.Getwd()
 	if err != nil {
@@ -53,12 +91,15 @@ func main() {
 	scanner := bufio.NewScanner(f)
 
 	partOneSum := 0
+	partTwoSum := 0
 
 	for scanner.Scan() {
 		battery := scanner.Text()
 
 		partOneSum += partOne(battery)
+		partTwoSum += partTwo(battery)
 	}
 
 	fmt.Printf("Part One: %d\n", partOneSum)
+	fmt.Printf("Part Two: %d\n", partTwoSum)
 }
